@@ -6,6 +6,8 @@ from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.neighbors import NearestNeighbors
 
 
+uploaded_ratings = "C:/Users/luciu/Workspace/Senac_proj/Recomender_System/Recomender/recomender/data/ratings.csv"
+
 def main():
     st.title("Sistema de Recomendação de Filmes")
     st.title("Sistema de Recomendação usando técnica de conteúdo")
@@ -40,7 +42,6 @@ def main():
             return None
 
     uploaded_file = st.file_uploader("Faça o upload de um arquivo CSV ou ZIP para dados de filmes", type=["csv", "zip"])
-    uploaded_ratings = "C:/Users/luciu/Workspace/Senac_proj/Recomender_System/Recomender/recomender/data/ratings.csv"
 
     def content_based_recommendations(title, cosine_sim, indices, df):
         idx = indices[title]
@@ -66,7 +67,7 @@ def main():
 
     if uploaded_file is not None and uploaded_ratings is not None:
         df = load_data(uploaded_file)
-        df_ratings = pd.read_csv(uploaded_ratings)
+        df_ratings = pd.read_csv(uploaded_ratings, sep=',')
 
         if df is None:
             st.error(
