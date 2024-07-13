@@ -5,9 +5,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.neighbors import NearestNeighbors
 
-
-uploaded_ratings = "C:/Users/luciu/Workspace/Senac_proj/Recomender_System/Recomender/recomender/data/ratings.csv"
-
 def main():
     st.title("Sistema de Recomendação de Filmes")
     st.title("Sistema de Recomendação usando técnica de conteúdo")
@@ -65,17 +62,20 @@ def main():
         hybrid_recs = pd.concat([content_recs, pd.Series(collab_recs)]).drop_duplicates().head(n)
         return hybrid_recs
 
-    if uploaded_file is not None and uploaded_ratings is not None:
+    # Carregar o dataset de ratings do diretório 'data'
+    ratings_path = "data/ratings.csv"
+    df_ratings = pd.read_csv(ratings_path, sep=',')
+
+    if uploaded_file is not None:
         df = load_data(uploaded_file)
-        df_ratings = pd.read_csv(uploaded_ratings, sep=',')
 
         if df is None:
             st.error(
                 "Erro ao carregar o arquivo de filmes. Certifique-se de que é um arquivo CSV ou um arquivo ZIP contendo um CSV.")
-        elif df_ratings.empty:
-            st.error("Erro ao carregar o arquivo de avaliações. Certifique-se de que é um arquivo CSV.")
+        elif df.empty:
+            st.error("Erro ao carregar o arquivo de filmes. O arquivo está vazio.")
         else:
-            st.write("Arquivos carregados com sucesso!")
+            st.write("Arquivo carregado com sucesso!")
             st.dataframe(df.head())
 
             # Usar um subconjunto menor de dados para evitar o MemoryError
@@ -119,7 +119,6 @@ def main():
                 # Exibindo recomendações
                 st.write(f"Recomendações para o usuário '{user_id}' e filme '{movie_title}':")
                 st.dataframe(recommendations)
-
 
 if __name__ == "__main__":
     main()
